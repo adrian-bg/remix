@@ -1,0 +1,97 @@
+version: '3.8'
+
+services:
+  nginx:
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8002:8002"
+      - "8003:8003"
+      - "8080:8080"
+    volumes:
+      - ./authenticator:/var/www/html
+      - ./wallet:/var/www/html
+    depends_on:
+      - mysql
+      - authenticator
+      - payment_processor
+      - wallet1
+      - wallet2
+    networks:
+      - remix
+
+  mysql:
+    container_name: mysql
+    image: mysql:8.2
+    ports:
+      - 3306:3306
+    environment: 
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+    volumes:
+      - ./storage/mysql:/var/lib/mysql
+      - ./storage/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - remix
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin:latest
+    ports:
+      - 3400:80
+    environment:
+      PMA_ARBITRARY: 1
+    depends_on:
+      - mysql
+    networks:
+      - remix
+
+  authenticator:
+    container_name: authenticator
+    build:
+      context: .
+      dockerfile: ./authenticator/Dockerfile
+    volumes:
+      - ./authenticator:/var/www/html
+    networks:
+      - remix
+
+  payment_processor:
+    container_name: payment_processor
+    build:
+      context: .
+      dockerfile: ./payment_processor/Dockerfile
+    volumes:
+      - ./payment_processor:/var/www/html
+    networks:
+      - remix
+
+  wallet1:
+    container_name: wallet1
+    build:
+      context: .
+      dockerfile: ./wallet/Dockerfile
+    volumes:
+      - ./wallet:/var/www/html
+    networks:
+      - remix
+
+  wallet2:
+    container_name: wallet2
+    build:
+      context: .
+      dockerfile: ./wallet/Dockerfile
+    volumes:
+      - ./wallet:/var/www/html
+    networks:
+      - remix
+
+networks:
+  remix:
+    driver: bridge
