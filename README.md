@@ -39,6 +39,8 @@ The payment processor service is running on http://localhost:8001 by default and
 
 ## Diagram
 
+![WalletManagement](https://github.com/adrian-bg/remix/assets/17720228/e5307af5-1f73-4102-980f-77da202515f6)
+
 
 ## Getting started
 
