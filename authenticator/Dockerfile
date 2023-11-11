@@ -13,6 +13,10 @@ RUN mkdir -p /var/www/html/public
 
 RUN docker-php-ext-install pdo pdo_mysql
 
-# COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
+RUN apk add --update \
+    nodejs-current \
+    npm
 
 CMD ["php-fpm", "-y", "/usr/local/etc/php-fpm.conf", "-R"]

@@ -28,15 +28,13 @@ services:
     container_name: mysql
     image: mysql:8.2
     ports:
-      - 3306:3306
-    environment: 
-      MYSQL_DATABASE: laravel
-      MYSQL_USER: laravel
-      MYSQL_PASSWORD: secret
+      - "3306:3306"
+    environment:
       MYSQL_ROOT_PASSWORD: secret
     volumes:
       - ./storage/mysql:/var/lib/mysql
       - ./storage/my.cnf:/etc/mysql/my.cnf
+      - ./storage/sqls:/docker-entrypoint-initdb.d
     networks:
       - remix
 
@@ -44,7 +42,7 @@ services:
     container_name: phpmyadmin
     image: phpmyadmin:latest
     ports:
-      - 3400:80
+      - "3400:80"
     environment:
       PMA_ARBITRARY: 1
     depends_on:

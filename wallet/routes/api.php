@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\{
+    AccountController
+};
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Middleware\ValidateAuthToken;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,6 +16,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
+
+    Route::middleware(['auth.token.validate'])->group(function () {
+
+        Route::post('account', [AccountController::class, 'store']);
+        Route::get('account/{account}', [AccountController::class, 'show']);
+        Route::get('account/', [AccountController::class, 'index']);
+
+    });
+
 });
+
