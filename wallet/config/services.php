@@ -33,6 +33,10 @@ return [
 
     'authenticator' => [
         'url' => env('AUTHENTICATOR_URL'),
-    ]
+    ],
+
+    'payment_processor' => [
+        'url' => env('PAYMENT_PROCESSOR_URL'),
+    ],
 
 ];

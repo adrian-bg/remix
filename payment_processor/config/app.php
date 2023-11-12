@@ -168,6 +168,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\PaymentServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -184,5 +185,15 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
+
+    'transaction_types' => [
+        'credit' => 'credit',
+        'debit' => 'debit',
+    ],
+
+    'output_statuses' => [
+        'completed' => 1,
+        'failed' => 4,
+    ],
 
 ];

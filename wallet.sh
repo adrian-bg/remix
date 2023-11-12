@@ -12,6 +12,7 @@ init() {
   docker-compose exec authenticator php artisan key:generate --env=testing
   docker-compose exec authenticator php artisan migrate
   docker-compose exec authenticator php artisan passport:install
+  docker-compose exec authenticator php artisan migrate
   docker-compose exec authenticator npm ci
   docker-compose exec authenticator npm run build
 
@@ -27,8 +28,11 @@ init() {
   docker-compose exec payment_processor composer install
   docker-compose exec payment_processor cp .env.example .env
   docker-compose exec payment_processor php artisan key:generate
+  docker-compose exec payment_processor php artisan key:generate --env=testing
+  docker-compose exec payment_processor php artisan migrate
   docker-compose exec payment_processor npm ci
   docker-compose exec payment_processor npm run build
+  docker-compose exec -T payment_processor php artisan queue:work --daemon &
 }
 
 start() {
@@ -42,7 +46,6 @@ stop() {
 if [ "$1" = "build" ]
 then
   build
-  init
 elif [ "$1" = "init" ]
 then
   init

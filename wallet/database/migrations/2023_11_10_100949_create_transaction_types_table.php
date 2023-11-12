@@ -24,13 +24,13 @@ return new class extends Migration
             [
                 [
                     'id' => 1,
-                    'name' => 'Credit',
+                    'name' => 'Deposit',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
                 [
                     'id' => 2,
-                    'name' => 'Debit',
+                    'name' => 'Withdraw',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],

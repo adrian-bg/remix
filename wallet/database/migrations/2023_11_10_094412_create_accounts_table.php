@@ -21,7 +21,7 @@ return new class extends Migration
             $table->float('balance', 12,2)
                 ->nullable(false)
                 ->default(0);
-            $table->timestamp('deactivated_at')->nullable(true)->default(null);
+            $table->softDeletes( 'deleted_at');
             $table->timestamps();
         });
     }

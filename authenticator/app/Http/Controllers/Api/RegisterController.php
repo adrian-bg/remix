@@ -14,7 +14,7 @@ class RegisterController extends Controller
     /**
      * Register a user
      *
-     * Adds a new user to the resource and returns
+     * Attempts to add a new user to the resource and returns
      * the user's data with an OAuth2 token
      *
      * @param RegisterRequest $request

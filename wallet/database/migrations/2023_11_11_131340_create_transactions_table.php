@@ -17,6 +17,10 @@ return new class extends Migration
             $table->foreign('account_id')
                 ->references('id')
                 ->on('accounts');
+            $table->unsignedBigInteger('card_id');
+            $table->foreign('card_id')
+                ->references('id')
+                ->on('cards');
             $table->integer('transaction_type_id')->nullable(false);
             $table->foreign('transaction_type_id')
                 ->references('id')
@@ -25,7 +29,7 @@ return new class extends Migration
             $table->foreign('transaction_status_id')
                 ->references('id')
                 ->on('transaction_statuses');
-            $table->float('balance', 12,2)
+            $table->float('amount', 12,2)
                 ->nullable(false);
             $table->timestamps();
         });

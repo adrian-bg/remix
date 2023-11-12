@@ -26,7 +26,7 @@ class AuthenticatorService implements Authenticatable
             $response = Http::withHeaders([
                 'Authorization' => $request->header('Authorization'),
                 'Accept' => 'application/json'
-            ])->get(config('services.authenticator.url') . 'get-logged-user');
+            ])->get(config('services.authenticator.url') . 'user');
 
             if ($response && $response->ok()) {
                 return $response->json();

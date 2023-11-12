@@ -2,30 +2,52 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\AccountRepository;
+use Exception;
+use App\Models\Account;
+use App\Http\Requests\{
+    StoreAccountRequest,
+    UpdateAccountRequest
+};
 use Illuminate\Http\JsonResponse;
 use App\Interfaces\Authenticatable;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreAccountRequest;
+use App\Repositories\AccountRepository;
 
 class AccountController extends Controller
 {
 
     /**
-     * Display a listing of the resource.
+     * List the user accounts
+     *
+     * Attempts to show all accounts for the user from the OAuth2 Authorization header
      *
      * @param Authenticatable $authenticationService
      * @return JsonResponse
+     * @response array{success:bool, data: Account[]}
      */
     public function index(Authenticatable $authenticationService): JsonResponse
     {
-        $accountRepository = new AccountRepository($authenticationService);
+        try {
+            $accountRepository = new AccountRepository($authenticationService);
 
-        return response()->json($accountRepository->getAccounts());
+            return response()->json([
+                'success' => true,
+                'data' => $accountRepository->getAccounts(),
+            ]);
+        } catch (Exception $exception) {
+            Log::error($exception);
+        }
+
+        return response()->json([
+            'success' => false
+        ], 500);
     }
 
     /**
-     * Store a newly created resource in storage
+     * Create an account
+     *
+     * Attempts to create an account for the user from the OAuth2 Authorization header
      *
      * @param StoreAccountRequest $request
      * @param Authenticatable $authenticationService
@@ -33,36 +55,72 @@ class AccountController extends Controller
      */
     public function store(StoreAccountRequest $request, Authenticatable $authenticationService): JsonResponse
     {
-        $accountRepository = new AccountRepository($authenticationService);
+        try {
+            $accountRepository = new AccountRepository($authenticationService);
+            $account = $accountRepository->createAccount($request);
 
-        return response()->json($accountRepository->createAccount($request));
+            if ($account) {
+                return response()->json([
+                    'success' => true,
+                    'data' => $account
+                ]);
+            }
+        } catch (Exception $exception) {
+            Log::error($exception);
+        }
+
+        return response()->json(['success' => false], 500);
     }
 
     /**
-     * Display the specified resource.
+     * Get an account
+     *
+     * Attempts to retrieve an account for the user from the OAuth2 Authorization header
      *
      * @param int $id
      * @param Authenticatable $authenticationService
      * @return JsonResponse
+     * @response array{success:bool, data: Account}
      */
     public function show(int $id, Authenticatable $authenticationService): JsonResponse
     {
-        $accountRepository = new AccountRepository($authenticationService);
+        try {
+            $accountRepository = new AccountRepository($authenticationService);
 
-        return response()->json($accountRepository->showAccount($id));
+            return response()->json([
+                'success' => true,
+                'data' => $accountRepository->showAccount($id)
+            ]);
+        } catch (Exception $exception) {
+            Log::error($exception);
+        }
+
+        return response()->json(['success' => false], 500);
     }
 
     /**
-     * Update the specified resource from storage.
+     * Soft deletes an account
      *
-     * @param string $id
+     * Attempts to delete an account for the user from the OAuth2 Authorization header
+     *
+     * @param int $id
      * @param Authenticatable $authenticationService
      * @return JsonResponse
+     * @response array{success:bool}
      */
-    public function update(string $id, Authenticatable $authenticationService): JsonResponse
+    public function destroy(int $id, Authenticatable $authenticationService): JsonResponse
     {
-        $accountRepository = new AccountRepository($authenticationService);
+        try {
+            $accountRepository = new AccountRepository($authenticationService);
 
-        return response()->json($accountRepository->showAccount($id));
+            return response()->json([
+                'success' => $accountRepository->destroyAccount($id) === 1,
+            ]);
+        } catch (Exception $exception) {
+            Log::error($exception);
+        }
+
+        return response()->json(['success' => false], 500);
     }
+
 }

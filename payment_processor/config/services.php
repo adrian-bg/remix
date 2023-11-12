@@ -31,4 +31,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'wallet' => [
+        'complete_transaction_url' => env('COMPLETE_TRANSACTION_URL')
+    ],
+
 ];

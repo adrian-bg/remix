@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\{
+    Model,
+    SoftDeletes
+};
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Account extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -33,11 +35,4 @@ class Account extends Model
         return $this->belongsTo(Currency::class);
     }
 
-    /**
-     * Scope a query to only include active users.
-     */
-    public function scopeActive(Builder $query): void
-    {
-        $query->whereNull('deactivated_at');
-    }
 }
