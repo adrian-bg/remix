@@ -187,4 +187,10 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    'api' => [
+        'test' => [
+            'url' => env('API_URL_TEST')
+        ]
+    ],
+
 ];

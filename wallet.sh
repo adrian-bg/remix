@@ -59,4 +59,5 @@ elif [ "$1" = "test" ]
 then
   start
   docker-compose exec authenticator php artisan test
+  docker-compose exec wallet1 php artisan test
 fi
