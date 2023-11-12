@@ -50,11 +50,12 @@ The payment processor service is running on http://localhost:8001 by default and
 ## Getting started
 
 In order to start the project, you can run the shell scrip that helps bring all containers up and running.
-Make the script executable with command `chmod +x wallet.sh`. To start the project, run 1 - build, 2 - init, 3 - start; to stop the project run stop; to test the project run test;
+Make the script executable with command `chmod +x wallet.sh`. To start the project for a first time run 1 - build, 2 - init, 3 - start; to stop the project run stop; to test the project run test;
+After the init command, the services can be started from the start command
 
 Available commands:
  - `./wallet.sh build`
- - `./wallet.sh init`
+ - `./wallet.sh init` 
  - `./wallet.sh start`
  - `./wallet.sh stop`
  - `./wallet.sh test`

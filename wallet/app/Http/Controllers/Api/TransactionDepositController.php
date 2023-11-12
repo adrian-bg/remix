@@ -33,7 +33,6 @@ class TransactionDepositController extends Controller
      */
     public function store(TransactionRequest $request, HasPayments $paymentService, Authenticatable $authenticationService): JsonResponse
     {
-
         try {
             $transaction = $paymentService->createTransaction(
                 $request,

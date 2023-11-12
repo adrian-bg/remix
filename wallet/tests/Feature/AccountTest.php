@@ -2,27 +2,20 @@
 
 namespace Tests\Feature;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Models\Currency;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AccountTest extends TestCase
 {
 
     use RefreshDatabase;
 
-    public function test_user_can_create_account_successfully(): void
+    public function test_account_creation_is_successful(): void
     {
         $userData = $this->getUserData();
 
-        $currency = Currency::first();
-
-        $response = $this->withHeaders(['Authorization'=>'Bearer '. $userData->get('token')])
-            ->post(config('app.api.test.url') . 'account', [
-                'currency_id' => $currency->getAttribute('id')
-            ])
-            ->assertStatus(200)
+        $response = $this->createAccount();
+        $response->assertStatus(200)
             ->assertJsonStructure(
                 [
                     'success',

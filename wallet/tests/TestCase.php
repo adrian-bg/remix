@@ -2,10 +2,18 @@
 
 namespace Tests;
 
-use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use App\Models\{
+    CardType,
+    Currency,
+    CardProvider
+};
+use Illuminate\Support\Facades\{
+    Http,
+    Artisan
+};
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Testing\TestResponse;
+use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -53,4 +61,47 @@ abstract class TestCase extends BaseTestCase
 
         return $this->userData;
     }
+
+    /**
+     * @return TestResponse
+     */
+    protected function createAccount(): TestResponse
+    {
+        $userData = $this->getUserData();
+        $currency = Currency::first();
+
+        return $this->withHeaders(['Authorization' => 'Bearer '. $userData->get('token')])
+            ->post(config('app.api.test.url') . 'account', [
+                'currency_id' => $currency->getAttribute('id')
+            ]);
+    }
+
+    protected function createCard(): TestResponse
+    {
+        $userData = $this->getUserData();
+        $cardData = $this->cardDataPayload();
+
+        return $this->withHeaders(['Authorization' => 'Bearer '. $userData->get('token')])
+            ->post(config('app.api.test.url') . 'card', $cardData);
+    }
+
+    /**
+     * @return array
+     */
+    protected function cardDataPayload(): array
+    {
+        $userData = $this->getUserData();
+        $cardType = CardType::first();
+        $cardProvider = CardProvider::first();
+
+        return [
+            'card_type_id' => $cardType->getAttribute('id'),
+            'card_provider_id' => $cardProvider->getAttribute('id'),
+            'names' => $userData->get('name'),
+            'number' => '123123123',
+            'cvv' => '123',
+            'expire_at' => now()->addYears(2)->format('Y-d')
+        ];
+    }
+
 }
