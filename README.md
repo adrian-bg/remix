@@ -24,6 +24,9 @@ The **MySQL** container brings 2 main databases up and running and 2 more for te
 
 The **phpMyAdmin** is for mainly for visualization and working with the records in the db for development purposes. It can be reached at http://localhost:3400 where server is `mysql`, user is `root` and password is `secret`
 
+`Docker Compose version v2.23.0`
+`Docker version 24.0.6`
+
 ## Authenticator
 The authenticator service is running on http://localhost:8000 by default and the internal service communication can be made through the nginx server where the service can be reached at http://nginx:8000/api/v1/.
 
