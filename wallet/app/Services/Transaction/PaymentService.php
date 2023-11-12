@@ -71,7 +71,7 @@ class PaymentService implements HasPayments
             throw new PaymentServiceException(__('exceptions.complete_transaction_not_found'), PaymentServiceException::COMPLETE_TRANSACTION_NOT_FOUND_CODE);
         }
 
-        switch($transaction->getAttribute('')) {
+        switch($transaction->getAttribute('transaction_type_id')) {
             case TransactionType::DEPOSIT_TYPE:
                 $this->completeDepositTransaction($transaction, $statusId);
 
@@ -111,14 +111,19 @@ class PaymentService implements HasPayments
      */
     public function completeDepositTransaction(Transaction $transaction, $statusId): void
     {
-        $transaction->load('account');
 
-        $amount = $transaction->getAttribute('amount');
-        $account = $transaction->getAttribute('account');
-        $balance = $account->getAttribite('balance');
+        if ($statusId === TransactionStatus::TRANSACTION_STATUS_COMPLETED) {
+            $transaction->load('account');
 
-        $account->setAttribute('balance', bcadd($amount, $balance, 2));
-        $account->save();
+            $amount = $transaction->getAttribute('amount');
+            $account = $transaction->getAttribute('account');
+            $balance = $account->getAttribute('balance');
+
+            $account->setAttribute('balance', bcadd($amount, $balance, 2));
+            $account->save();
+        }
+
+        $this->updateTransactionBalance($transaction, $statusId);
     }
 
     /**
@@ -126,14 +131,30 @@ class PaymentService implements HasPayments
      */
     public function completeWithdrawTransaction(Transaction $transaction, $statusId): void
     {
-        $transaction->load('account');
+        if ($statusId === TransactionStatus::TRANSACTION_STATUS_COMPLETED) {
+            $transaction->load('account');
 
-        $amount = $transaction->getAttribute('amount');
-        $account = $transaction->getAttribute('account');
-        $balance = $account->getAttribite('balance');
+            $amount = $transaction->getAttribute('amount');
+            $account = $transaction->getAttribute('account');
+            $balance = $account->getAttribute('balance');
 
-        $account->setAttribute('balance', bcsub($balance, $amount, 2));
-        $account->save();
+            $account->setAttribute('balance', bcsub($balance, $amount, 2));
+            $account->save();
+
+        }
+
+        $this->updateTransactionBalance($transaction, $statusId);
+    }
+
+    /**
+     * @param Transaction $transaction
+     * @param $statusId
+     * @return void
+     */
+    private function updateTransactionBalance(Transaction $transaction, $statusId): void
+    {
+        $transaction->setAttribute('transaction_status_id', $statusId);
+        $transaction->save();
     }
 
     /**

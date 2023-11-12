@@ -47,17 +47,12 @@ class TransactionDepositController extends Controller
 
             return match (true) {
                 $exception instanceof AccountRepositoryException,
-                $exception instanceof PaymentServiceException,
-                $exception instanceof CardRepositoryException
+                    $exception instanceof PaymentServiceException,
+                    $exception instanceof CardRepositoryException
                 => response()->json(['success' => false, 'message' => $exception->getMessage()], 422),
                 default => response()->json(['success' => false], 500),
             };
         }
-    }
-
-    public function update(): JsonResponse
-    {
-        return response()->json();
     }
 
 }

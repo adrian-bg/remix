@@ -29,6 +29,7 @@ class TransactionController extends Controller
     {
 
         try {
+            Log::info(json_encode($request->all()));
 
             $paymentService->completeTransaction($request->get('transaction_id'), $request->get('status_id'));
 
