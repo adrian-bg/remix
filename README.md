@@ -15,12 +15,12 @@ The **Wallet service** has his own database and is responsible for creating/upda
 The **Payment processor** has his own database and is responsible for integrating a payment provider and communicating with it (them).
 
 The **MySQL** container brings 2 main databases up and running and 2 more for testing. The services connect to mysql at http://mysql:3306 with default user: `root` and password: `secret`
-- authenticator
-- test_authenticator
-- wallet
-- test_wallet
-- payment
-- test_payment
+ - authenticator
+ - test_authenticator
+ - wallet
+ - test_wallet
+ - payment
+ - test_payment
 
 The **phpMyAdmin** is for mainly for visualization and working with the records in the db for development purposes. It can be reached at http://localhost:3400 where server is `mysql`, user is `root` and password is `secret`
 
@@ -47,14 +47,14 @@ The payment processor service is running on http://localhost:8001 by default and
 ## Getting started
 
 In order to start the project, you can run the shell scrip that helps bring all containers up and running.
-Make the script executable with command `chmod +x wallet.sh`.
+Make the script executable with command `chmod +x wallet.sh`. To start the project, run 1 - build, 2 - init, 3 - start; to stop the project run stop; to test the project run test;
 
 Available commands:
  - `./wallet.sh build`
-- `./wallet.sh init`
-- `./wallet.sh start`
-- `./wallet.sh stop`
-- `./wallet.sh test`
+ - `./wallet.sh init`
+ - `./wallet.sh start`
+ - `./wallet.sh stop`
+ - `./wallet.sh test`
 
 ### Build command
 
